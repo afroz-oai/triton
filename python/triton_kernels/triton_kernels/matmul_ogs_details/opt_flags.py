@@ -168,7 +168,11 @@ def make_default_opt_flags_amd(
     )
     # check constraints
     # TODO(afroz): Update this later.
-    assert all(getattr(ret, ck) == cv for ck, cv in constraints.items() if cv is not None), f"{ret} != {constraints}"
+    assert all(
+        getattr(ret, ck) == cv if not callable(cv) else True
+        for ck, cv in constraints.items()
+        if cv is not None
+    ), f"{ret} != {constraints}"
     return ret
 
 def make_default_opt_flags_nvidia(
@@ -304,7 +308,11 @@ def make_default_opt_flags_nvidia(
     )
     # check constraints
     # TODO(afroz): Update this later.
-    assert all(getattr(ret, ck) == cv for ck, cv in constraints.items() if cv is not None), f"{ret} != {constraints}"
+    assert all(
+        getattr(ret, ck) == cv if not callable(cv) else True
+        for ck, cv in constraints.items()
+        if cv is not None
+    ), f"{ret} != {constraints}"
     return ret
 
 # --------------
@@ -314,7 +322,7 @@ def make_default_opt_flags_nvidia(
 _opt_flags_constraints: dict = dict()
 _opt_flags: OptFlags | None = None
 
-def update_opt_flags_constraints(constraints: dict[str, int | Callable]):
+def update_opt_flags_constraints(constraints: dict[str, int | CallableSplitK]):
     global _opt_flags_constraints
     _opt_flags_constraints.update(constraints)
 
